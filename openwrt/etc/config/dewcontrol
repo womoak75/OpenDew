@@ -1,0 +1,5 @@
+
+config dewcontrol 'main'
+	option disabled '0'
+	option respawn '1'
+
