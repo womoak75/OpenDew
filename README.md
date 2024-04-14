@@ -332,3 +332,11 @@ SENSORMASTERCONFIG='[{"name":"id3-116","id":"keller1"},{"name":"id1-231","id":"a
 SENSORCONFIG='{"insensors":["keller1"],"outsensors":["aussen1stock"]}'
 
 ```
+
+## faq
+
+### will it also run on a 'real' linux system?
+
+probably.  
+the shellscripts should run on any linux system.  
+but startup scripts for initd / systemd are necessary.
