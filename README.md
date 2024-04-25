@@ -308,7 +308,7 @@ custom_status_off() {
 
 executes custom_fanoff() or custom_fanon()  functions (if defined).
 
-### configuration
+## configuration
 
 configfile '/etc/opendew/opendew.cfg'
 
@@ -332,11 +332,56 @@ SENSORMASTERCONFIG='[{"name":"id3-116","id":"keller1"},{"name":"id1-231","id":"a
 SENSORCONFIG='{"insensors":["keller1"],"outsensors":["aussen1stock"]}'
 
 ```
+### sensor mapping (rtl_433 to internal)
+
+```
+SENSORMASTERCONFIG='[{"name":"id3-116","id":"keller1"},{"name":"id1-231","id":"aussen1stock"}]'
+```
+In a first step, the sensor data must be converted from the rtl_433 proprietary format into the application's own data format.
+
+```json
+// rtl_433 specific
+{
+  "time": "2024-04-07 16:27:27.095538",
+  "model": "Bresser-3CH",
+  "id": 116,
+  "channel": 3,
+  "battery_ok": 1,
+  "temperature_C": 15.5,
+  "humidity": 63,
+  "mic": "CHECKSUM"
+}
+```
+to
+```json
+// dew app specific
+{ 
+  "name": "id3-116", 
+  "temperature_C": 15.5, 
+  "humidity": 63 
+}
+```
+During this process, a unique ID is also assigned to each sensor, which is then used internally. In the event of a sensor replacement (e.g., due to a defect), only the mapping to the internal name/ID needs to be changed.
+
+The ID generation follows the following pattern:
+```
+id{rtl_433.channel}-{rtl_433.id}
+```
+e.g. 
+```
+id:116, channel=3 -> 'id3-116'
+```
+### sensor mapping (internal to in/outsensor)
+
+```
+SENSORCONFIG='{"insensors":["keller1","keller2","keller3"],"outsensors":["aussen1stock","aussenterrasse"]}'
+```
+
+Indoor and outdoor sensors can be defined as 1 to n sensors each. The respective value (temperature, humidity, and dew point) is determined as the average across all configured sensors for indoor/outdoor use.
 
 ## faq
 
 ### will it also run on a 'real' linux system?
 
 probably.  
-the shellscripts should run on any linux system.  
-but startup scripts for initd / systemd are necessary.
+the shellscripts should run on any linux system, but startup scripts for initd / systemd are necessary.
