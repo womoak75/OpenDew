@@ -383,5 +383,16 @@ Indoor and outdoor sensors can be defined as 1 to n sensors each. The respective
 
 ### will it also run on a 'real' linux system?
 
-probably.  
-the shellscripts should run on any linux system, but startup scripts for initd / systemd are necessary.
+Probably.  
+The shellscripts should run on any linux system, but startup scripts for initd / systemd are necessary.
+
+### is there a UI available?
+
+No.
+
+### how to display data?
+
+Use your favorite home automation system.  
+For example: [FHEM](https://fhem.de/)
+
+![flow](docs/temp_humidity_diagram.png)
