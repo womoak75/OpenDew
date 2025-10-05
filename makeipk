@@ -1,0 +1,53 @@
+#!/bin/bash
+
+PROJECT_DIR="$(pwd)"
+SCRIPTS_DIR="$PROJECT_DIR/scripts"
+OPENWRT_DIR="$PROJECT_DIR/openwrt"
+
+PKG_NAME="opendew"
+PKG_VERSION="0.0.1"
+PKG_ARCH="all"
+PKG_SECTION="base"
+PKG_PRIORITY="optional"
+PKG_MAINTAINER="akandroid75@googlemail.com"
+PKG_SOURCE="temperature / humidity / dew point controlled ventilation system running on OpenWrt"
+PKG_DESCRIPTION="temperature / humidity / dew point controlled ventilation system running on OpenWrt"
+
+BUILD_DIR="$PROJECT_DIR/${PKG_NAME}-${PKG_VERSION}-${PKG_ARCH}"
+
+mkdir -p "$BUILD_DIR/CONTROL"
+mkdir -p "$BUILD_DIR/data"
+
+# Create the control file
+cat <<EOF > "$BUILD_DIR/CONTROL/control"
+Package: ${PKG_NAME}
+Version: ${PKG_VERSION}
+Architecture: ${PKG_ARCH}
+Section: ${PKG_SECTION}
+Priority: ${PKG_PRIORITY}
+Maintainer: ${PKG_MAINTAINER}
+Source: ${PKG_SOURCE}
+Description: ${PKG_DESCRIPTION}
+EOF
+
+cp "$PROJECT_DIR/postinst" "$BUILD_DIR/CONTROL/"
+cp "$PROJECT_DIR/prerm" "$BUILD_DIR/CONTROL/"
+
+cp -r "$OPENWRT_DIR"/* "$BUILD_DIR/data/"
+mkdir -p "$BUILD_DIR/data/usr/bin/"
+cp "$SCRIPTS_DIR"/* "$BUILD_DIR/data/usr/bin/"
+
+
+cd "$BUILD_DIR/CONTROL"
+tar czvf "$BUILD_DIR/control.tar.gz" .
+cd "$BUILD_DIR/data"
+tar czvf "$BUILD_DIR/data.tar.gz" . --owner=0 --group=0
+cd "$BUILD_DIR"
+echo "2.0" > "$BUILD_DIR/debian-binary"
+tar czf "$PROJECT_DIR/${PKG_NAME}_${PKG_VERSION}_${PKG_ARCH}.ipk" debian-binary control.tar.gz data.tar.gz
+
+# Clean up
+rm -rf "$BUILD_DIR"
+
+echo "Package created: $BUILD_DIR.ipk"
+
