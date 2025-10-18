@@ -1,4 +1,7 @@
-# <img src="docs/logo.svg" width="50" /> OpenDew 
+[![Run ipk build](https://github.com/womoak75/OpenDew/actions/workflows/ipkbuild.yml/badge.svg)](https://github.com/womoak75/OpenDew/actions/workflows/ipkbuild.yml)   
+
+# <img src="docs/logo.svg" width="50" /> OpenDew    
+
 
 ![overview](docs/overview.svg)
 
